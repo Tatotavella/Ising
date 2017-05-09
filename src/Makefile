@@ -6,7 +6,7 @@ LD = $(CC)
 SOURCE_C = $(wildcard *.c)
 OBJECTS_C = $(patsubst %.c, %_c.o, $(SOURCE_C))
 
-CFLAGS = -std=gnu99
+CFLAGS = -std=gnu99 -lm
 EXECUTABLE = ../bin/ising.e
 
 default: help
@@ -30,7 +30,7 @@ all: objects executable
 	$(CC) $(CFLAGS) -c $^ -o $@
 
 %.e: $(OBJECTS_C)
-	$(LD) $^ -o $@
+	$(LD) $^ -o $@ -lm
 
 clean:
 	rm -rfv $(OBJECTS_C) $(EXECUTABLE)
