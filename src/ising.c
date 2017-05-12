@@ -19,5 +19,6 @@ int main(int argc, char **argv) {
   */
   print_lattice(lattice, n);
   metropolis(lattice, n ,T);
+  print_lattice(lattice, n);
   return 0;
 }

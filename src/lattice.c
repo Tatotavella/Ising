@@ -22,6 +22,7 @@ int print_lattice(int *lattice, int n) {
   for(i = 0; i<n; i++){
     for(j = 0; j<n; j++){
       printf("%3d",*(lattice+i*n+j));
+    }
     printf("\n");
   }
   return 0;
