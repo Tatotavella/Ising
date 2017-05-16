@@ -7,4 +7,6 @@ int sgn(int x);
 int get_neighbours(int *neigh, int n_neigh, int *lattice, int n, int idx);
 int print_data(int *lattice, int n, int *neigh, int n_neigh, int idx);
 int mc_table(double *mc_list, int list_lenght, float T);
+double energy_lattice(int *lattice, int n);
+double magnet_lattice(int *lattice, int n);
 #endif

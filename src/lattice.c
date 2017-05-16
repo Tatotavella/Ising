@@ -34,3 +34,4 @@ int print_lattice(int *lattice, int n) {
   }
   return 0;
 }
+

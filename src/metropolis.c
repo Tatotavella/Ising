@@ -6,8 +6,8 @@
 
 int metropolis(int *lattice, int n, float T) {
   int place = pick_site(lattice,n);
-  flip(lattice,n,place,T);
-  return 0;
+  int delta_e = flip(lattice,n,place,T);
+  return delta_e;
 }
 
 int pick_site(int *lattice, int n) {
@@ -17,15 +17,11 @@ int pick_site(int *lattice, int n) {
 }
 
 int flip(int *lattice, int n, int idx, float T) {
-  /*
-  //MC energy list. Indexes correspond to -8,-4,0,4,8 delta energies
-  double mc_list[5];
-  mc_list[0] = 1.0;
-  mc_list[1] = 1.0;
-  mc_list[2] = 1.0;
-  mc_list[3] = exp(-4/T);
-  mc_list[4] = exp(-8/T);
-  //*/
+
+  //HARDCODED EXTERN MAGNETIC FIELD B
+  double B = 1.0;
+
+
   double mc_list[5];
   mc_table(mc_list, 5, T);
 
@@ -34,11 +30,12 @@ int flip(int *lattice, int n, int idx, float T) {
   int neigh[4];// 0 left | 1 right | 2 up | 3 down
   get_neighbours(neigh,4,lattice,n,idx);
 
-  print_data(lattice, n, neigh, 4, idx);
+  // print_data(lattice, n, neigh, 4, idx);
 
   //Calcute energy difference and flip
   int spin_place = *(lattice+idx);
-  int delta_e = 2*spin_place*(neigh[0]+neigh[1]+neigh[2]+neigh[3]); 
+  int delta_e = 2*spin_place*(neigh[0]+neigh[1]+neigh[2]+neigh[3]);
+  int delta_b = 2*B*spin_place; 
   double prob;
 
   if(delta_e<=0){//Flip
@@ -52,12 +49,14 @@ int flip(int *lattice, int n, int idx, float T) {
     prob = mc_list[(delta_e+8)/4];
     if(coin < prob){
       *(lattice + idx) = -1*(*(lattice + idx));
-    }    
+    }else{
+      delta_e = 0;//To not count it in energy change
+    }
   }
 
-  printf("Delta E: %d, Prob: %4f\n",delta_e,prob);
+  //printf("Delta E: %d, Prob: %4f\n",delta_e,prob);
 
-  return 0;
+  return delta_e;
 }
 
 int get_neighbours(int *neigh, int n_neigh, int *lattice, int n, int idx){
@@ -104,4 +103,29 @@ int mc_table(double *mc_list, int list_lenght, float T){
 
 int sgn(int x){
   return (x>0)-(x<0);
+}
+
+double energy_lattice(int *lattice, int n){
+  double energy = 0.0;
+  int place,spin_place;
+  int neigh[4];
+  
+  for(place=0;place<n*n;place++){
+    spin_place = *(lattice + place);
+    get_neighbours(neigh,4,lattice,n,place);
+    energy = energy - spin_place*neigh[1] - spin_place*neigh[3];
+  }
+  return energy;
+}
+
+double magnet_lattice(int *lattice, int n){
+  double magnet = 0.0;
+  int place,spin_place;
+ 
+  for(place=0;place<n*n;place++){
+    spin_place = *(lattice + place);
+    magnet = magnet + spin_place;
+  }
+  magnet = magnet/(double)(n*n);
+  return magnet;
 }
