@@ -17,15 +17,7 @@ int pick_site(int *lattice, int n) {
 }
 
 int flip(int *lattice, int n, int idx, float T) {
-  /*
-  //MC energy list. Indexes correspond to -8,-4,0,4,8 delta energies
-  double mc_list[5];
-  mc_list[0] = 1.0;
-  mc_list[1] = 1.0;
-  mc_list[2] = 1.0;
-  mc_list[3] = exp(-4/T);
-  mc_list[4] = exp(-8/T);
-  //*/
+
   double mc_list[5];
   mc_table(mc_list, 5, T);
 
