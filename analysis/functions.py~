@@ -1,0 +1,14 @@
+import os
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
+
+def autocorr(x,y,tau):
+    mean = np.mean(y)
+    var = np.var(y)
+    partsum = 0.0;
+    for t in range(len(x)/tau):
+        partialsum += (y[t] - mean)*(y[t+tau] - mean)
+    corr = tau*partialsum/len(x)
+    return corr/var
+        

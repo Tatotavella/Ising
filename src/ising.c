@@ -8,74 +8,76 @@
 
 int main(int argc, char **argv) {
   
-  float prob;
+  float prob = 0.5;
   int niter;
   int n;
   float T;
-  float B; //Only positive values
+  float J,B; //Only positive values
 
   if (argc==6){
     sscanf(argv[1],"%d",&n);
     sscanf(argv[2],"%f",&T);
-    sscanf(argv[3],"%f",&B);
-    sscanf(argv[4],"%d",&niter);
-    sscanf(argv[5],"%f",&prob);
+    sscanf(argv[3],"%f",&J);
+    sscanf(argv[4],"%f",&B);
+    sscanf(argv[5],"%d",&niter);
   }else{
     n = 16;
     T = 1.0;
+    J = 1.0;
     B = 1.0;
     niter = 2000;
-    prob = 0.5;
   }
-  if(T<0 || B<0 || n<0 || niter<0){
-     printf("ERROR: Ingresar n, T , B , niter, prob mayores a 0\n");
+  if(T<0 || B<0 || n<0 || niter<0 || J<0){
+     printf("ERROR: Ingresar n, T , J, B, niter mayores a 0\n");
      exit(EXIT_FAILURE);
   }
   
   int *lattice = malloc(n * n * sizeof(int));
 
+  //Table of energies initialization
   int energy_levels = 10;
   double mc_list[energy_levels];
-  mc_table(mc_list,energy_levels,T,B);
+  mc_table(mc_list,energy_levels,T,J,B);
 
   srand(time(NULL));
 
   fill_lattice(lattice, n, prob);
 
-  double initial_energy = energy_lattice(lattice,n,B);
+  //Initial energy and magnetization
+  double initial_energy = energy_lattice(lattice,n,J,B);
   int initial_magnet = magnet_lattice(lattice,n);
+  printf("\n Initial E: %f\n",initial_energy);
+  printf("\n Initial M: %d\n",initial_magnet);
 
   double energy = initial_energy;
   int magnet = initial_magnet;
-  
-  int delta=0;
-  int aux;
 
+  //Thermalization
+  for (int i = 0; i < 10000; i++) {
+    metropolis(lattice, n, T, J, B, mc_list, &energy, &magnet);
+  }
+  
+  
+  FILE *fp = fopen("../results/data.txt","w");
+  fprintf(fp,"Step\t\t\tEnergy\t\t\tMagnetization\n");
+  
   print_lattice(lattice, n);
   for (int i = 0; i < niter; i++) {
-    aux = metropolis(lattice, n, T, B, mc_list, &energy, &magnet);
-    delta = delta + aux;
+    metropolis(lattice, n, T, J, B, mc_list, &energy, &magnet);
+    fprintf(fp,"%d\t\t\t%f\t\t\t%d\n",i,energy,magnet);
   }
+  fclose(fp);
   printf("\n\n\n");
   print_lattice(lattice, n);
 
-  double final_energy = energy_lattice(lattice,n,B);
+  double final_energy = energy_lattice(lattice,n,J,B);
   int final_magnet = magnet_lattice(lattice,n);
 
-  printf("\n Initial E: %f, Final E: %f\n",initial_energy,final_energy);
-  printf("\n Final E with deltas: %f\n",initial_energy + delta);
+  printf("\n Finals M:%d, E:%f\n",final_magnet,final_energy);
   
-  printf("\n Initial M: %d, Final M: %d\n",initial_magnet,final_magnet);
-
-  printf("\n Final M with data: %d\n",magnet);
-  printf("\n Final E with data: %f\n",energy);
-
-  /*
-  print_lattice(lattice, n);
-  metropolis(lattice, n ,T);
-  print_lattice(lattice, n);
-  */
-  
+  printf("\n Final M: %d\n",magnet);
+  printf("\n Final E: %f\n",energy);
+ 
   free(lattice);
   return 0;
 }
