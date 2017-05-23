@@ -7,10 +7,8 @@ def autocorr(y,tau):
     mean = np.mean(y)
     var = np.var(y)
     partsum = 0.0
-    for t in range(len(y)/tau):
-        #print(t)
-        #print(t+tau)
-        partsum += (y[t] - mean)*(y[t+tau-1] - mean)
-    corr = tau*partsum/len(y)
+    for t in range(len(y)-tau):
+        partsum += (y[t] - mean)*(y[t+tau] - mean)
+    corr = partsum/(len(y)-tau)
     return corr/var
         

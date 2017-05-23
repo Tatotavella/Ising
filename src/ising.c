@@ -53,12 +53,13 @@ int main(int argc, char **argv) {
   int magnet = initial_magnet;
 
   //Thermalization
-  for (int i = 0; i < 10000; i++) {
+  for (int i = 0; i < 50000; i++) {
     metropolis(lattice, n, T, J, B, mc_list, &energy, &magnet);
   }
   
   
   FILE *fp = fopen("../results/data.txt","w");
+  fprintf(fp,"n\t%d\tT\t%f\tJ\t%f\tB\t%f\tniter\t%d\n",n,T,J,B,niter);
   fprintf(fp,"Step\t\t\tEnergy\t\t\tMagnetization\n");
   
   print_lattice(lattice, n);
