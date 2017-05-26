@@ -46,8 +46,8 @@ int main(int argc, char **argv) {
   //Initial energy and magnetization
   double initial_energy = energy_lattice(lattice,n,J,B);
   int initial_magnet = magnet_lattice(lattice,n);
-  printf("\n Initial E: %f\n",initial_energy);
-  printf("\n Initial M: %d\n",initial_magnet);
+  //printf("\n Initial E: %f\n",initial_energy);
+  //printf("\n Initial M: %d\n",initial_magnet);
 
   double energy = initial_energy;
   int magnet = initial_magnet;
@@ -62,22 +62,22 @@ int main(int argc, char **argv) {
   fprintf(fp,"n\t%d\tT\t%f\tJ\t%f\tB\t%f\tniter\t%d\n",n,T,J,B,niter);
   fprintf(fp,"Step\t\t\tEnergy\t\t\tMagnetization\n");
   
-  print_lattice(lattice, n);
+  //print_lattice(lattice, n);
   for (int i = 0; i < niter; i++) {
     metropolis(lattice, n, T, J, B, mc_list, &energy, &magnet);
     fprintf(fp,"%d\t\t\t%f\t\t\t%d\n",i,energy,magnet);
   }
   fclose(fp);
-  printf("\n\n\n");
-  print_lattice(lattice, n);
+  //printf("\n\n\n");
+  //print_lattice(lattice, n);
 
   double final_energy = energy_lattice(lattice,n,J,B);
   int final_magnet = magnet_lattice(lattice,n);
 
-  printf("\n Finals M:%d, E:%f\n",final_magnet,final_energy);
+  //printf("\n Finals M:%d, E:%f\n",final_magnet,final_energy);
   
-  printf("\n Final M: %d\n",magnet);
-  printf("\n Final E: %f\n",energy);
+  //printf("\n Final M: %d\n",magnet);
+  //printf("\n Final E: %f\n",energy);
  
   free(lattice);
   return 0;
