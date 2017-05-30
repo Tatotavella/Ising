@@ -1,0 +1,18 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <math.h>
+
+#include "dataRead.h"
+
+int main(int argc, char **argv){
+  if (argc==2){
+    sscanf(argv[1],"%d",&n);
+  }else{
+    n = 16;
+  }
+  if(n<0){
+     printf("ERROR\n");
+     exit(EXIT_FAILURE);
+  }
+}
