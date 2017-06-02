@@ -9,7 +9,7 @@
 int main(int argc, char **argv) {
   
   float prob = 0.5;
-  int niter;
+  long int niter;
   int n;
   float T;
   float J,B; //Only positive values
@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
     sscanf(argv[2],"%f",&T);
     sscanf(argv[3],"%f",&J);
     sscanf(argv[4],"%f",&B);
-    sscanf(argv[5],"%d",&niter);
+    sscanf(argv[5],"%ld",&niter);
   }else{
     n = 16;
     T = 1.0;
@@ -65,6 +65,8 @@ int main(int argc, char **argv) {
   float Eprom;
   float Mprom;
 
+  long int i;
+  
   T = Tini;
 
   //Table of energies initialization
@@ -73,11 +75,14 @@ int main(int argc, char **argv) {
   mc_table(mc_list,energy_levels,T,J,B);
 
   //First thermalization
-  for (int i = 0; i < 3000000; i++) {
+  for (i = 0; i < 3000000; i++) {
     metropolis(lattice, n, T, J, B, mc_list, &energy, &magnet);
   }
 
-  int freqOUT = 1000000;
+  long int freqOUT = 1e6;
+  long int screenOUT = 1e10;
+
+  
 
   for(k=0; k<nOfTemps; k++){
     //T = ((Tfin - Tini)*k)/(nOfTemps-1) + Tini;
@@ -89,16 +94,19 @@ int main(int argc, char **argv) {
     Mprom = 0.0;
     
     //Thermalization
-    for (int i = 0; i < 50000; i++) {
+    for (i = 0; i < 50000; i++) {
       metropolis(lattice, n, T, J, B, mc_list, &energy, &magnet);
     }
 
-    for (int i = 0; i < niter; i++) {
+    for (i = 0; i < niter; i++) {
       metropolis(lattice, n, T, J, B, mc_list, &energy, &magnet);
       Eprom = Eprom + energy;
       Mprom = Mprom + magnet;
       if(i%freqOUT==0){
-	fprintf(dt,"%d\t\t\t%f\t\t\t%d\n",i,energy/(n*n),magnet);
+	fprintf(dt,"%e\t\t\t%f\t\t\t%d\n",(float)i,energy/(n*n),magnet);
+      }
+      if(i%screenOUT==0){
+	printf("%e\n",(float)i);
       }
     }
  
