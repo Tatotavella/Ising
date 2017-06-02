@@ -8,6 +8,7 @@ OBJECTS_C = $(patsubst %.c, %_c.o, $(SOURCE_C))
 
 CFLAGS = -std=gnu99 -lm
 EXECUTABLE = ../bin/ising.e
+EMT = ../bin/EMvsT.e
 
 default: help
 
@@ -16,6 +17,7 @@ help:
 Options:\n\n\
   make objects:       compiler makes objects for every *.c\n\
   make executable:    compiler makes executable\n\
+	make emt:    compiler makes executable\n\
   make all:           build all previous\n\
   make clean:         delete output files\n\
   make help:          display this help"
@@ -23,6 +25,8 @@ Options:\n\n\
 objects: $(OBJECTS_C)
 
 executable: $(EXECUTABLE)
+
+emt: $(EMT)
 
 all: objects executable
 
