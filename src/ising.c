@@ -12,7 +12,7 @@ int main(int argc, char **argv) {
   long int niter;
   int n;
   float T;
-  float J,B; //Only positive values
+  float J,B;
 
   if (argc==6){
     sscanf(argv[1],"%d",&n);
@@ -27,8 +27,8 @@ int main(int argc, char **argv) {
     B = 1.0;
     niter = 2000;
   }
-  if(T<0 || B<0 || n<0 || niter<0 || J<0){
-     printf("ERROR: Ingresar n, T , J, B, niter mayores a 0\n");
+  if(T<0 || n<0 || niter<0){
+     printf("ERROR: Ingresar n, T , niter mayores a 0\n");
      exit(EXIT_FAILURE);
   }
   
@@ -43,80 +43,26 @@ int main(int argc, char **argv) {
   int magnet = magnet_lattice(lattice,n);
 
 
-  //print_lattice(lattice, n);
-
-  //Data writing
-  FILE *fp = fopen("../results/MEvsT.txt","w");
-  fprintf(fp,"Temp\t\t\tMeanEnergy\t\t\tMeanMagnetization\n");
-
-  //Data writing
-  
-  FILE *dt = fopen("../results/data.txt","w");
-  fprintf(dt,"Step\t\t\tEnergy\t\t\tMagnetization\n");
-  
-
-
-  //Temperature Loop
-  float Tini = 2.26;
-  float Tfin = 2.26;
-  int nOfTemps = 1;
-  int k;
-
-  float Eprom;
-  float Mprom;
-
-  long int i;
-  
-  T = Tini;
+  print_lattice(lattice, n);
 
   //Table of energies initialization
   int energy_levels = 10;
   double mc_list[energy_levels];
   mc_table(mc_list,energy_levels,T,J,B);
 
-  //First thermalization
-  for (i = 0; i < 3000000; i++) {
-    metropolis(lattice, n, T, J, B, mc_list, &energy, &magnet);
+  int i;
+
+  for (i = 0; i < niter; i++) {
+      metropolis(lattice, n, T, J, B, mc_list, &energy, &magnet);
   }
 
-  long int freqOUT = 1e6;
-  long int screenOUT = 1e10;
+  printf("\n\n\n");
+  print_lattice(lattice,n);
+  printf("\n\n\n");
+  printf("Final Energy: %f, Final Magnet %d\n",energy,magnet);
+  printf("Final Energy: %f, Final Magnet %d\n",energy_lattice(lattice,n,J,B),magnet_lattice(lattice,n));
 
-  
 
-  for(k=0; k<nOfTemps; k++){
-    //T = ((Tfin - Tini)*k)/(nOfTemps-1) + Tini;
-    T = 2.26;
-    
-    mc_table(mc_list,energy_levels,T,J,B);
-  
-    Eprom = 0.0;
-    Mprom = 0.0;
-    
-    //Thermalization
-    for (i = 0; i < 50000; i++) {
-      metropolis(lattice, n, T, J, B, mc_list, &energy, &magnet);
-    }
-
-    for (i = 0; i < niter; i++) {
-      metropolis(lattice, n, T, J, B, mc_list, &energy, &magnet);
-      Eprom = Eprom + energy;
-      Mprom = Mprom + magnet;
-      if(i%freqOUT==0){
-	fprintf(dt,"%e\t\t\t%f\t\t\t%d\n",(float)i,energy/(n*n),magnet);
-      }
-      if(i%screenOUT==0){
-	printf("%e\n",(float)i);
-      }
-    }
- 
-    Eprom = Eprom/(n*n*niter);
-    Mprom = Mprom/(n*n*niter);
-    fprintf(fp,"%f\t\t\t%f\t\t\t%f\n",T,Eprom,Mprom);
-
-  }
-  fclose(dt);
-  fclose(fp);
   free(lattice);
   return 0;
 }

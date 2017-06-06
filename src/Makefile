@@ -8,7 +8,6 @@ OBJECTS_C = $(patsubst %.c, %_c.o, $(SOURCE_C))
 
 CFLAGS = -std=gnu99 -lm
 EXECUTABLE = ../bin/ising.e
-EMT = ../bin/EMvsT.e
 
 default: help
 

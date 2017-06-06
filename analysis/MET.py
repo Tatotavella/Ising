@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 
 data_dir = os.path.dirname(__file__) #<-- Absolute directory
-rel_path = "../results/MEvsT.txt"
+rel_path = "../results/EMT/MEvsT.txt"
 dire = os.path.join(data_dir, rel_path)
 g = open(dire,'r')
 T=[]

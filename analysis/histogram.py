@@ -3,31 +3,37 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 
-data_dir = os.path.dirname(__file__) #<-- Absolute directory
-rel_path = "../results/data.txt"
-dire = os.path.join(data_dir, rel_path)
-g = open(dire,'r')
-step = []
-E = []
-M = []
-next(g)
-for line in g:
-	inter = [x for x in line.split('\t\t\t')]
-	step.append(int(inter[0]))
-	E.append(float(inter[1]))
-	M.append(float(inter[2]))
+Tes = ['5.00','4.38','3.75','3.12','2.50','2.40','2.38','2.37','2.36','2.35','2.34','2.32','2.31','2.30','2.29','2.28','2.26','2.25','2.24','2.23','2.22','2.20','2.19','2.18','2.17','2.16','2.14','2.13']
 
-#plt.figure(1)
-#plt.plot(step,E,'bo')
-#plt.xlabel('MC step')
-#plt.ylabel('Energy')
-#plt.figure(2)
-plt.plot(step,M,'bo')
-plt.xlabel('MC step')
-plt.ylabel('Magnetization')
+for T in Tes[::-1]:
+	data_dir = os.path.dirname(__file__) #<-- Absolute directory
+	rel_path = "../results/bimodal/data"
+	dire = os.path.join(data_dir, rel_path)
+	dire = dire + T + '.txt'
+	g = open(dire,'r')
+	step = []
+	E = []
+	M = []
+	next(g)
+	for line in g:
+		inter = [x for x in line.split('\t\t\t')]
+		step.append(float(inter[0]))
+		E.append(float(inter[1]))
+		M.append(float(inter[2]))
+	
+	#plt.figure(1)
+	#plt.plot(step,E,'bo')
+	#plt.xlabel('MC step')
+	#plt.ylabel('Energy')
+	#plt.figure(2)
+	'''	
+	plt.plot(step,M,'o')
+	plt.xlabel('MC step')
+	plt.ylabel('Magnetization')
+	
+	plt.show()
+	'''
+	plt.hist(M, bins=100,alpha=0.5,normed=True,label='Temp: '+T)
 
-plt.show()
-
-plt.hist(M, bins=200)
-
+plt.legend(loc='upper left',prop={'size':8})
 plt.show()

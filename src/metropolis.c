@@ -14,7 +14,10 @@ int pick_site(int *lattice, int n) {
   /*
     Picks a random site of a size n lattice
    */
-  float rnd = (float)rand()/(float)RAND_MAX; 
+  float rnd = 1.0;
+  while(rnd==1.0){ //Avoids place equal to n*n
+    rnd = (float)rand()/(float)RAND_MAX;
+  }
   int place = (int)(n*n*rnd);
   return place;
 }
@@ -43,18 +46,24 @@ int flip(int *lattice, int n, int idx, float T, float J, float B, double *mc_lis
     //Write energy and magnetization change
     *p_ener = *p_ener + delta;
     *p_magnet = *p_magnet + *(lattice + idx)*2;
-    //printf("Delta E: %d, Delta B: %.4f, Prob: %f\n",delta_e,delta_b,prob);
+    //printf("Delta E: %.4f, Delta B: %.4f, Prob: %f\n",delta_e,delta_b,prob);
+    //printf("Change Accepted\n");
 
   }else{ //Throw a coin to flip or not
+    float K = fabs(J);
+    float R = fabs(B);
     float coin = (float)rand()/(float)RAND_MAX;
-    int mc_idx = 2*(delta_e + 8*J)/(4*J) + (delta_b + 2*B)/2*B;
+    int mc_idx = 2*(delta_e + 8*K)/(4*K) + (delta_b + 2*R)/4*R;
     prob = mc_list[mc_idx];
+    //printf("Delta E: %.4f, Delta B: %.4f, Prob: %f\n",delta_e,delta_b,prob);
     if(coin < prob){
       *(lattice + idx) = -1*(*(lattice + idx));
       //Write energy and magnetization change
       *p_ener = *p_ener + delta;
       *p_magnet = *p_magnet + *(lattice + idx)*2;
-      //printf("Delta E: %d, Delta B: %.4f, Prob: %f\n",delta_e,delta_b,prob);
+      //printf("Change Accepted\n");
+    }else{
+      //printf("Change Rejected\n");
     }
   }
   return 0;
@@ -112,16 +121,18 @@ int mc_table(double *mc_list, int list_length, float T, float J, float B){
     mc_list[4] = exp(-8/T);
   }else if(list_length==10){
     //MC energy list. Indexes correspond to -8J-2B,-8J+2B,-4J-2B,-4J+2B,... delta energies
-    mc_list[0] = exp(-(-8*J-2*B)/T);
-    mc_list[1] = exp(-(-8*J+2*B)/T);
-    mc_list[2] = exp(-(-4*J-2*B)/T);
-    mc_list[3] = exp(-(-4*J+2*B)/T);
-    mc_list[4] = exp(-(-2*B)/T);
-    mc_list[5] = exp(-2*B/T);
-    mc_list[6] = exp(-(4*J-2*B)/T);
-    mc_list[7] = exp(-(4*J+2*B)/T);
-    mc_list[8] = exp(-(8*J-2*B)/T);
-    mc_list[9] = exp(-(8*J+2*B)/T);
+    float K = fabs(J);
+    float R = fabs(B);
+    mc_list[0] = exp(-(-8*K-2*R)/T);
+    mc_list[1] = exp(-(-8*K+2*R)/T);
+    mc_list[2] = exp(-(-4*K-2*R)/T);
+    mc_list[3] = exp(-(-4*K+2*R)/T);
+    mc_list[4] = exp(-(-2*R)/T);
+    mc_list[5] = exp(-2*R/T);
+    mc_list[6] = exp(-(4*K-2*R)/T);
+    mc_list[7] = exp(-(4*K+2*R)/T);
+    mc_list[8] = exp(-(8*K-2*R)/T);
+    mc_list[9] = exp(-(8*K+2*R)/T);
   }
   return 0;
 }
