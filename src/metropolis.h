@@ -9,4 +9,7 @@ int print_data(int *lattice, int n, int *neigh, int n_neigh, int idx);
 int mc_table(double *mc_list, int list_length, float T, float J, float B);
 double energy_lattice(int *lattice, int n, float J, float B);
 int magnet_lattice(int *lattice, int n);
+double autocorr(double *arr, int len_arr, int tau);
+double mean(double *array,int arraysize);
+double disp(double *array,int arraysize);
 #endif

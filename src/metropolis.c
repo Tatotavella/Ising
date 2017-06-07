@@ -175,3 +175,37 @@ int magnet_lattice(int *lattice, int n){
   }
   return magnet;
 }
+double mean(double *array,int arraysize){
+	int i;
+	double prom = 0;
+	for(i=0;i<arraysize;i++){
+		prom=prom+array[i];	
+	}
+	prom=prom/arraysize;
+	return prom;	
+}
+double disp(double *array,int arraysize){
+	int i;
+	double disp = 0;
+	double prom = mean(array,arraysize);
+	
+	for(i=0;i<arraysize;i++){
+		disp=disp+(array[i]-prom)*(array[i]-prom);	
+	}
+	disp=sqrt(disp/arraysize);
+	return disp;
+}
+double autocorr(double *arr, int len_arr, int tau){
+        double prom = mean(arr,len_arr);
+	double disp = disp(arr,len_arr);
+	double partsum;
+	int k;
+	int end = len_arr - tau;
+	for(k=0; k < end; k++){
+	  partsum = partsum + (arr[k] - prom)*(arr[k+tau] - prom)
+	}
+	double corr = partsum/(len_arr - tau);
+	corr = corr/(disp*disp);
+
+	return corr;  
+}

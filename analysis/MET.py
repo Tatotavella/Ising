@@ -21,6 +21,13 @@ for line in g:
 	Eerr.append(float(inter[3]))
 	Merr.append(float(inter[4]))
 
+susc = []
+cv = []
+for i in range(len(T)):
+	susc.append(Merr[i]/T[i])
+	cv.append(Eerr[i]/(T[i]**2))
+
+
 plt.figure(1)
 #plt.plot(T,M,'ro')
 plt.errorbar(T,M,yerr=Merr,fmt='ro')
@@ -34,14 +41,14 @@ plt.ylabel('Energy')
 
 plt.show()
 
-plt.plot(T,Merr,'*')
+plt.plot(T,susc,'*')
 plt.xlabel('Temperature')
-plt.ylabel('Magnetization Var')
+plt.ylabel('Susceptibility')
 plt.show()
 
-plt.plot(T,Eerr,'*')
+plt.plot(T,cv,'*')
 plt.xlabel('Temperature')
-plt.ylabel('Energy Var')
+plt.ylabel('Specific Heat')
 plt.show()
 
 
