@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
 
 
   //Temperature Loop
-  int nOfTemps = 5;
+  int nOfTemps = 12;
   int k;
 
   double Eprom;

@@ -43,7 +43,7 @@ int main(int argc, char **argv) {
   int magnet = magnet_lattice(lattice,n);
 
 
-  print_lattice(lattice, n);
+  //print_lattice(lattice, n);
 
   //Table of energies initialization
   int energy_levels = 10;
@@ -52,17 +52,32 @@ int main(int argc, char **argv) {
 
   int i;
 
-  for (i = 0; i < niter; i++) {
+  for (i = 0; i < 1e6; i++) {
       metropolis(lattice, n, T, J, B, mc_list, &energy, &magnet);
   }
 
-  printf("\n\n\n");
-  print_lattice(lattice,n);
-  printf("\n\n\n");
-  printf("Final Energy: %f, Final Magnet %d\n",energy,magnet);
-  printf("Final Energy: %f, Final Magnet %d\n",energy_lattice(lattice,n,J,B),magnet_lattice(lattice,n));
+  //Data writing
+  char filename[100];
+  sprintf(filename,"../results/aucorr/data%.2f.txt",T);
+  FILE *dt;
+  dt = fopen(filename,"w");
+  fprintf(dt,"Step\t\t\tEnergy\t\t\tMagnetization\n");
+  printf("%.2f\n",T);
+  
+  
+  for (i = 0; i < niter; i++) {
+      metropolis(lattice, n, T, J, B, mc_list, &energy, &magnet);
+      fprintf(dt,"%e\t\t\t%f\t\t\t%d\n",(float)i,energy/(n*n),magnet);
+  }
+
+  //printf("\n\n\n");
+  //print_lattice(lattice,n);
+  //printf("\n\n\n");
+  //printf("Final Energy: %f, Final Magnet %d\n",energy,magnet);
+  //printf("Final Energy: %f, Final Magnet %d\n",energy_lattice(lattice,n,J,B),magnet_lattice(lattice,n));
 
 
+  fclose(dt);
   free(lattice);
   return 0;
 }

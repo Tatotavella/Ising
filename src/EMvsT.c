@@ -47,9 +47,12 @@ int main(int argc, char **argv) {
 
 
   //print_lattice(lattice, n);
-
+  
   //Data writing
-  FILE *fp = fopen("../results/EMT/MEvsT.txt","w");
+  char filename[100];
+  sprintf(filename,"../results/EMT/MEvsTN%d.txt",n);
+  FILE *fp;
+  fp = fopen(filename,"w");
   fprintf(fp,"T\t\t\t<E>\t\t\t<M>\t\t\tV(E)\t\t\tV(M)\n");
 
   //Temperature Loop
@@ -80,7 +83,7 @@ int main(int argc, char **argv) {
 
   for(k=0; k<nOfTemps; k++){
     T = ((Tfin - Tini)*k)/(nOfTemps-1) + Tini;
-    
+    printf("%.2f\n",T);
     mc_table(mc_list,energy_levels,T,J,B);
   
     Eprom = 0.0; //Means

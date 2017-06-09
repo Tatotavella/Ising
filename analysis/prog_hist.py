@@ -5,7 +5,7 @@ from scipy.optimize import curve_fit
 
 
 data_dir = os.path.dirname(__file__) #<-- Absolute directory
-rel_path = "../results/bimodal1e12.txt"
+rel_path = "../results/bimodal/data2.28.txt"
 #rel_path = "../results/bimodal/data2.31.txt"
 dire = os.path.join(data_dir, rel_path)
 g = open(dire,'r')
@@ -19,7 +19,7 @@ for line in g:
 	E.append(float(inter[1]))
 	M.append(float(inter[2]))
 
-partials = np.logspace(2,6,5)
+partials = np.logspace(3,6,5)
 
 for p in partials:
 	plt.hist(M[:int(p)], bins=50,alpha=0.4,normed=True,label='Partial size: '+str(int(p)))

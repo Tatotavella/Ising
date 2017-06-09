@@ -33,7 +33,7 @@ int main(int argc, char **argv) {
      printf("ERROR: Ingresar n, T , J, B, niter mayores a 0\n");
      exit(EXIT_FAILURE);
   }
-  
+  /*
   int *lattice = malloc(n * n * sizeof(int));
 
   srand(time(NULL));
@@ -139,5 +139,6 @@ int main(int argc, char **argv) {
   free(lattice);
   free(energy);
   free(magnet);
+  */
   return 0;
 }
