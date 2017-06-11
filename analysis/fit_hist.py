@@ -4,10 +4,11 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 import scipy.stats as stats 
 from scipy.special import gamma as Gamma
+import scipy
 
 data_dir = os.path.dirname(__file__) #<-- Absolute directory
 #rel_path = "../results/bimodal1e12.txt"
-rel_path = "../results/bimodal/data2.50.txt"
+rel_path = "../results/bimodal/data2.30.txt"
 dire = os.path.join(data_dir, rel_path)
 g = open(dire,'r')
 step = []
@@ -24,8 +25,12 @@ plt.hist(M,bins=100,alpha=0.5,normed=True)
 plt.xlabel('Magnetizacion por sitio')
 plt.show()
 '''
-hist , bin_edges = np.histogram(E, bins=100)
-centres = (bin_edges[:-1] + bin_edges[1:])/2.
+hist , bin_edges = np.histogram(M, bins=100)
+centres = (bin_edges[:-1] + bin_edges[1:])/2.0
+
+for i in range(len(centres)):
+	centres[i] = int(centres[i])
+print(centres)
 errs = np.sqrt(hist)
 
 def bimod(x, a, b, mu, sg):
@@ -42,14 +47,18 @@ def gamma( x, lmbd, k):
     y = lmbd * np.exp(-lmbd*x)*((lmbd*x)**(k-1))/Gamma(k)
     return y 
 
-guess = [40000.0,-1.1,0.05]
-#guess = [80000.0,80000.0,-2000.0,100.0]
-popt, pcov = curve_fit(mod, centres, hist, p0=guess)#, sigma=errs)
-x = np.linspace(-2,2,1000)
-fitb = mod(x, *popt)
+def poisson( x, lmbd, mu):
+    y = (np.exp(-lmbd)*lmbd**(x - mu))/scipy.misc.factorial(x-mu)
+    return y 
+
+#guess = [25000.0,-0.5,1000.0]
+guess = [18000.0,18000.0,-1000.0,100.0]
+popt, pcov = curve_fit(bimod, centres, hist, p0=guess)#, sigma=errs)
+#x = np.linspace(-2,2,1000)
+x = np.linspace(-4000,4000,1000)
+fitb = bimod(x, *popt)
 plt.plot(x,fitb,'r')
 
-print(popt)
 
 #popt, pcov = curve_fit(gamma, centres, hist, sigma=errs)
 #x = np.linspace(-4000,4000,1000)

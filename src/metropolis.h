@@ -6,7 +6,7 @@ int flip(int *lattice, int n, int idx, float T, float J, float B, double *mc_lis
 int sgn(int x);
 int get_neighbours(int *neigh, int n_neigh, int *lattice, int n, int idx);
 int print_data(int *lattice, int n, int *neigh, int n_neigh, int idx);
-int mc_table(double *mc_list, int list_length, float T, float J, float B);
+int mc_table(double *mc_list, float T, float J, float B);
 double energy_lattice(int *lattice, int n, float J, float B);
 int magnet_lattice(int *lattice, int n);
 double autocorr(double *arr, int len_arr, int tau);

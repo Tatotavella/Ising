@@ -2,9 +2,15 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
+import sys
+
+# The data file path can be an input
+if len(sys.argv) > 1:
+	rel_path = "../results/EMT/"+sys.argv[1]
+else:
+	rel_path = "../results/EMT/MEvsT.txt"
 
 data_dir = os.path.dirname(__file__) #<-- Absolute directory
-rel_path = "../results/EMT/MEvsTN64.txt"
 dire = os.path.join(data_dir, rel_path)
 g = open(dire,'r')
 T=[]
@@ -40,29 +46,7 @@ axarr[2].set_ylabel('Susceptibilidad')
 axarr[3].plot(T,cv,'*')
 axarr[3].set_xlabel('Temperatura')
 axarr[3].set_ylabel('Calor especifico')
-'''
-plt.figure(1)
-#plt.plot(T,M,'ro')
-plt.errorbar(T,M,yerr=Merr,fmt='ro')
-plt.xlabel('Temperatura')
-plt.ylabel('Magnetizacion')
-plt.figure(2)
-#plt.plot(T,E,'bo')
-plt.errorbar(T,E,yerr=Eerr,fmt='bo')
-plt.xlabel('Temperatura')
-plt.ylabel('Energia')
 
-plt.show()
-
-plt.plot(T,susc,'*')
-plt.xlabel('Temperatura')
-plt.ylabel('Susceptibilidad')
-plt.show()
-
-plt.plot(T,cv,'*')
-plt.xlabel('Temperatura')
-plt.ylabel('Calor especifico')
-'''
 plt.show()
 
 

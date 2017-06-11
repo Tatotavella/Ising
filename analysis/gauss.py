@@ -22,8 +22,8 @@ for line in g:
 	T.append(float(inter[0]))
 	muM.append(float(inter[2])/(N**2))
 	sgM.append(float(inter[3])/(N**2))
-	muE.append(float(inter[4])/(N**2))
-	sgE.append(float(inter[5])/(N**2))
+	#muE.append(float(inter[4])/(N**2))
+	#sgE.append(float(inter[5])/(N**2))
 
 chi = []
 for i,s in enumerate(sgM):

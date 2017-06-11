@@ -35,13 +35,15 @@ int flip(int *lattice, int n, int idx, float T, float J, float B, double *mc_lis
 
   //Calcute energy difference and flip
   int spin_place = *(lattice+idx);
-  float delta_e = 2*J*spin_place*(neigh[0]+neigh[1]+neigh[2]+neigh[3]);
+  int neigh_sum = neigh[0]+neigh[1]+neigh[2]+neigh[3];
+  float delta_e = 2*J*spin_place*neigh_sum;
   float delta_b = 2*B*spin_place; 
   float delta = delta_e + delta_b;
-  
+   
   double prob;
 
-  if(delta<=0){//Flip directly
+  if(delta<=0){
+    //Flip directly
     *(lattice + idx) = -1*(*(lattice + idx));
     //Write energy and magnetization change
     *p_ener = *p_ener + delta;
@@ -50,20 +52,10 @@ int flip(int *lattice, int n, int idx, float T, float J, float B, double *mc_lis
     //printf("Change Accepted\n");
 
   }else{ //Throw a coin to flip or not
-    float K = fabs(J);
-    float R = fabs(B);
     float coin = (float)rand()/(float)RAND_MAX;
     int mc_idx;
-    if(K==0.0){
-      if(B==0.0){
-	mc_idx = 4;
-      }else{
-	mc_idx = (delta_b + 2*R)/4*R;
-      }
-    }else{
-      mc_idx = 2*(delta_e + 8*K)/(4*K) + (delta_b + 2*R)/4*R;
-    }
-    
+    //Indexing corresponds to 2(delta_e + 8J)/4J + (delta_b + 2B)/4B
+    mc_idx = spin_place*neigh_sum + 4 + (spin_place + 1)/2;
     prob = mc_list[mc_idx];
     //printf("Delta E: %.4f, Delta B: %.4f, Prob: %f\n",delta_e,delta_b,prob);
     if(coin < prob){
@@ -78,6 +70,7 @@ int flip(int *lattice, int n, int idx, float T, float J, float B, double *mc_lis
   }
   return 0;
 }
+
 
 int get_neighbours(int *neigh, int n_neigh, int *lattice, int n, int idx){
   /*
@@ -117,33 +110,21 @@ int print_data(int *lattice, int n, int *neigh, int n_neigh, int idx){
   return 0;
 }
 
-int mc_table(double *mc_list, int list_length, float T, float J, float B){
+int mc_table(double *mc_list, float T, float J, float B){
   /*
-    Makes the list of possible delta energies in a sistem with interaction
+    Makes the list of possible delta energies in a system with interaction
     J and external magnetic field B. Writes it in mc_list.
    */
-  if(list_length==5){
-    //MC energy list. Indexes correspond to -8,-4,0,4,8 delta energies
-    mc_list[0] = 1.0;
-    mc_list[1] = 1.0;
-    mc_list[2] = 1.0;
-    mc_list[3] = exp(-4/T);
-    mc_list[4] = exp(-8/T);
-  }else if(list_length==10){
-    //MC energy list. Indexes correspond to -8J-2B,-8J+2B,-4J-2B,-4J+2B,... delta energies
-    float K = fabs(J);
-    float R = fabs(B);
-    mc_list[0] = exp(-(-8*K-2*R)/T);
-    mc_list[1] = exp(-(-8*K+2*R)/T);
-    mc_list[2] = exp(-(-4*K-2*R)/T);
-    mc_list[3] = exp(-(-4*K+2*R)/T);
-    mc_list[4] = exp(-(-2*R)/T);
-    mc_list[5] = exp(-2*R/T);
-    mc_list[6] = exp(-(4*K-2*R)/T);
-    mc_list[7] = exp(-(4*K+2*R)/T);
-    mc_list[8] = exp(-(8*K-2*R)/T);
-    mc_list[9] = exp(-(8*K+2*R)/T);
-  }
+  mc_list[0] = exp(-(-8*J-2*B)/T);
+  mc_list[1] = exp(-(-8*J+2*B)/T);
+  mc_list[2] = exp(-(-4*J-2*B)/T);
+  mc_list[3] = exp(-(-4*J+2*B)/T);
+  mc_list[4] = exp(-(-2*B)/T);
+  mc_list[5] = exp(-2*B/T);
+  mc_list[6] = exp(-(4*J-2*B)/T);
+  mc_list[7] = exp(-(4*J+2*B)/T);
+  mc_list[8] = exp(-(8*J-2*B)/T);
+  mc_list[9] = exp(-(8*J+2*B)/T);
   return 0;
 }
 
@@ -186,6 +167,9 @@ int magnet_lattice(int *lattice, int n){
   return magnet;
 }
 double mean(double *array,int arraysize){
+  /*
+    Returns the mean value of an array of doubles
+   */
 	int i;
 	double prom = 0;
 	for(i=0;i<arraysize;i++){
@@ -195,6 +179,9 @@ double mean(double *array,int arraysize){
 	return prom;	
 }
 double disp(double *array,int arraysize){
+  /*
+    Returns the dispersion of an array of doubles
+   */
 	int i;
 	double di = 0;
 	double prom = mean(array,arraysize);
@@ -206,6 +193,10 @@ double disp(double *array,int arraysize){
 	return di;
 }
 double autocorr(double *arr, int len_arr, int tau){
+  /*
+    Returns the autocorrelation value of a distance tau 
+    of an array of doubles
+   */
         double prom = mean(arr,len_arr);
 	double di = disp(arr,len_arr);
 	double partsum;
