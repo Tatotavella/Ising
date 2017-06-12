@@ -24,9 +24,9 @@ int main(int argc, char **argv) {
     sscanf(argv[5],"%f",&B);
     sscanf(argv[6],"%ld",&niter);
     sscanf(argv[7],"%d",&nOfTemps);
-    sscanf(argv[7],"%ld",&writeFreq);
+    sscanf(argv[8],"%ld",&writeFreq);
   }else{
-    printf("\nInput form: ./temp_ramp N InitialTemp FinalTemp J B NumberOfSteps NumberOfTemperatures OutputWriteFreq\n\n");
+    printf("\nInput form: ./histogram.e N InitialTemp FinalTemp J B NumberOfSteps NumberOfTemperatures OutputWriteFreq\n\n");
     printf("Makes a ramp of temperature from Tini to Tfin and saves the data in ../results/HISTOGRAM/MEvsTN\"SIZE\".txt\nThe data is mean magnetization, energy and its variances.\nIt also saves the energy and magnetization of states with a frequency of  OutputWriteFreq in ../results/HISTOGRAM/data\"TEMP\" for every temperature.\nThe decorrelation step is set to 10*N*N. First thermalization is set to 3000000 steps.\n\n");
     printf("The data is analyzed with the script ../analysis/histogram.py \n\n");
     exit(EXIT_FAILURE);
@@ -49,6 +49,7 @@ int main(int argc, char **argv) {
 
   //Data writing
   FILE *fp = fopen("../results/HISTOGRAM/MEvsT.txt","w");
+  fprintf(fp,"Sim Data: Program: %s , Size: %d , Tini: %f , Tfin: %f , J: %f , B: %f , niter: %ld , nOfTemps: %d , writeFreq: %ld\n",argv[0],n,Tini,Tfin,J,B,niter,nOfTemps,writeFreq);
   fprintf(fp,"T\t\t\t<E>\t\t\t<M>\t\t\tV(E)\t\t\tV(M)\n");
 
 
@@ -79,17 +80,17 @@ int main(int argc, char **argv) {
 
   FILE *dt;  
 
-  printf("Actual temperature: %.2f,  %%0 of simulation\n",T);
+  printf("Actual temperature: %.2f,  0%% of simulation\n",T);
   
   for(k=0; k<nOfTemps; k++){
     T = ((Tfin - Tini)*k)/(nOfTemps-1) + Tini;
-    printf("\033[A\33[2K\rActual temperature: %.2f, %%%d of simulation\n",T,(int)((float)k*100)/(nOfTemps-1));
+    printf("\033[A\33[2K\rActual temperature: %.2f, %d%% of simulation\n",T,(int)((float)k*100)/(nOfTemps-1));
     
     mc_table(mc_list,T,J,B);
 
     //Data writing
     char filename[100];
-    sprintf(filename,"../results/bimodal/data%.2f.txt",T);
+    sprintf(filename,"../results/HISTOGRAM/data%f.txt",T);
     dt = fopen(filename,"w");
     fprintf(dt,"Step\t\t\tEnergy\t\t\tMagnetization\n");
   

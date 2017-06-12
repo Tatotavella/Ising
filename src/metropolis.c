@@ -94,6 +94,31 @@ int get_neighbours(int *neigh, int n_neigh, int *lattice, int n, int idx){
 
   return 0;
 }
+
+int get_neighbours_diag(int *neigh, int n_neigh, int *lattice, int n, int idx){
+  /*
+    Gets diagonal nearest neighbours and writes them in neigh
+    0 left-up | 1 right-up | 2 left-down | 3 right-down
+  */
+  int place_i,place_j;
+  place_i = floor(idx/n);
+  place_j = idx - place_i*n;
+  int m;  
+
+  //Neighbours
+  m = (place_j-1+n)%n +  n*((place_i-1+n)%n);
+  neigh[0] = *(lattice + m);
+  m = (place_j+1+n)%n + n*((place_i-1+n)%n);
+  neigh[1] = *(lattice + m);  
+  m = (place_j-1+n)%n +  n*((place_i+1+n)%n);
+  neigh[2] = *(lattice + m);
+  m = (place_j+1+n)%n +  n*((place_i+1+n)%n);
+  neigh[3] = *(lattice + m);
+
+  return 0;
+}
+
+
 int print_data(int *lattice, int n, int *neigh, int n_neigh, int idx){
   /*
     Prints specific data of a selected site in idx and its neighbours
@@ -148,6 +173,23 @@ double energy_lattice(int *lattice, int n, float J, float B){
     spin_place = *(lattice + place);
     get_neighbours(neigh,4,lattice,n,place);
     energy = energy - J*spin_place*neigh[1] - J*spin_place*neigh[3] - spin_place*B;
+  }
+  return energy;
+}
+
+double energy_lattice_diag(int *lattice, int n, float J, float B){
+  /*
+    Returns the energy of a lattice of size n with J interaction with 
+    its diagonal neighbours assuming its antiferromagnetic so -J is used.
+  */
+  double energy = 0.0;
+  int place,spin_place;
+  int neigh_diag[4];
+  
+  for(place=0;place<n*n;place++){
+    spin_place = *(lattice + place);
+    get_neighbours_diag(neigh_diag,4,lattice,n,place);
+    energy = energy + J*spin_place*neigh_diag[1];
   }
   return energy;
 }

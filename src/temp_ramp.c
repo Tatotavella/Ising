@@ -57,6 +57,7 @@ int main(int argc, char **argv) {
   sprintf(filename,"../results/EMT/MEvsTN%d.txt",n);
   FILE *fp;
   fp = fopen(filename,"w");
+  fprintf(fp,"Sim Data: Program: %s , Size: %d , Tini: %f , Tfin: %f , J: %f , B: %f , niter: %d , nOfTemps: %d\n",argv[0],n,Tini,Tfin,J,B,niter,nOfTemps);
   fprintf(fp,"T\t\t\t<E>\t\t\t<M>\t\t\tV(E)\t\t\tV(M)\n");
 
   //Temperature Loop
@@ -84,11 +85,11 @@ int main(int argc, char **argv) {
   int decorr = 10*n*n;
   int dataPoints;
 
-  printf("Actual temperature: %.2f,  %%0 of simulation\n",T);
+  printf("Actual temperature: %.2f,  0%% of simulation\n",T);
   
   for(k=0; k<nOfTemps; k++){
     T = ((Tfin - Tini)*k)/(nOfTemps-1) + Tini;
-    printf("\033[A\33[2K\rActual temperature: %.2f, %%%d of simulation\n",T,(int)((float)k*100)/(nOfTemps-1));
+    printf("\033[A\33[2K\rActual temperature: %.2f, %d%% of simulation\n",T,(int)((float)k*100)/(nOfTemps-1));
     mc_table(mc_list,T,J,B);
   
     Eprom = 0.0; //Means

@@ -5,6 +5,7 @@ from scipy.optimize import curve_fit
 import scipy.stats as stats 
 from scipy.special import gamma as Gamma
 import scipy
+from functions import *
 
 data_dir = os.path.dirname(__file__) #<-- Absolute directory
 #rel_path = "../results/bimodal1e12.txt"
@@ -28,28 +29,10 @@ plt.show()
 hist , bin_edges = np.histogram(M, bins=100)
 centres = (bin_edges[:-1] + bin_edges[1:])/2.0
 
-for i in range(len(centres)):
-	centres[i] = int(centres[i])
-print(centres)
+
 errs = np.sqrt(hist)
 
-def bimod(x, a, b, mu, sg):
-    y = a * np.exp(-((x - mu)/sg)**2) + b * np.exp(-((x+mu)/sg)**2)
-    return y
-def mod(x, a, mu, sg):
-	y = a * np.exp(-((x - mu)/sg)**2)
-	return y
 
-def lognorm(x, a, b, mu, sg):
-    y = a * np.exp(-((np.log(x)-mu)/sg)**2)/x + b * np.exp(-((np.log(x)+mu)/sg)**2)/x
-    return y
-def gamma( x, lmbd, k):
-    y = lmbd * np.exp(-lmbd*x)*((lmbd*x)**(k-1))/Gamma(k)
-    return y 
-
-def poisson( x, lmbd, mu):
-    y = (np.exp(-lmbd)*lmbd**(x - mu))/scipy.misc.factorial(x-mu)
-    return y 
 
 #guess = [25000.0,-0.5,1000.0]
 guess = [18000.0,18000.0,-1000.0,100.0]

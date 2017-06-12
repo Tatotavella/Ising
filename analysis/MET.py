@@ -4,7 +4,13 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 import sys
 
-# The data file path can be an input
+'''
+Script for the output of temp_ramp.e program.
+Shows the data and calculates specific heat and 
+susceptibility.
+'''
+
+# The data file name can be an input
 if len(sys.argv) > 1:
 	rel_path = "../results/EMT/"+sys.argv[1]
 else:
@@ -18,6 +24,7 @@ E=[]
 M=[]
 Eerr=[]
 Merr=[]
+next(g)
 next(g)
 for line in g:
 	inter = [x for x in line.split('\t\t')]
@@ -33,19 +40,23 @@ for i in range(len(T)):
 	susc.append(Merr[i]/T[i])
 	cv.append(Eerr[i]/(T[i]**2))
 
-f, axarr = plt.subplots(4, sharex=True)
+
+f, axarr = plt.subplots(2, sharex=True)
 axarr[0].errorbar(T,M,yerr=Merr,fmt='ro')
 axarr[0].set_ylabel('Magnetizacion')
 
 axarr[1].errorbar(T,E,yerr=Eerr,fmt='bo')
 axarr[1].set_ylabel('Energia')
+axarr[1].set_xlabel('Temperatura')
 
-axarr[2].plot(T,susc,'go')
-axarr[2].set_ylabel('Susceptibilidad')
+plt.figure(1)
+g, bxarr = plt.subplots(2, sharex=True)
+bxarr[0].plot(T,susc,'go')
+bxarr[0].set_ylabel('Susceptibilidad')
 
-axarr[3].plot(T,cv,'*')
-axarr[3].set_xlabel('Temperatura')
-axarr[3].set_ylabel('Calor especifico')
+bxarr[1].plot(T,cv,'*')
+bxarr[1].set_xlabel('Temperatura')
+bxarr[1].set_ylabel('Calor especifico')
 
 plt.show()
 
