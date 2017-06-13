@@ -180,7 +180,7 @@ double energy_lattice(int *lattice, int n, float J, float B){
 double energy_lattice_diag(int *lattice, int n, float J, float B){
   /*
     Returns the energy of a lattice of size n with J interaction with 
-    its diagonal neighbours assuming its antiferromagnetic so -J is used.
+    its diagonal neighbours.
   */
   double energy = 0.0;
   int place,spin_place;
@@ -189,7 +189,7 @@ double energy_lattice_diag(int *lattice, int n, float J, float B){
   for(place=0;place<n*n;place++){
     spin_place = *(lattice + place);
     get_neighbours_diag(neigh_diag,4,lattice,n,place);
-    energy = energy + J*spin_place*neigh_diag[1];
+    energy = energy - J*spin_place*neigh_diag[1];
   }
   return energy;
 }

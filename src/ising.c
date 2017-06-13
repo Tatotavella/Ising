@@ -21,16 +21,15 @@ int main(int argc, char **argv) {
     sscanf(argv[4],"%f",&B);
     sscanf(argv[5],"%ld",&niter);
   }else{
-    n = 16;
-    T = 1.0;
-    J = 1.0;
-    B = 1.0;
-    niter = 2000;
+    printf("\nInput form: ./ising.e N Temperature J B NumberOfSteps\n\n");
+    printf("Implementation of the Monte Carlo algorithm for the Ising system with interaction energy H = -Jsum(SiSj) -Bsum(Si)\nThis program makes a run at a single temperature showing initial and final lattices\n\n");
+    exit(EXIT_FAILURE);
   }
   if(T<0 || n<0 || niter<0){
-     printf("ERROR: Ingresar n, T , niter mayores a 0\n");
+     printf("ERROR: Positive n, T, niter\n");
      exit(EXIT_FAILURE);
   }
+  
   
   int *lattice = malloc(n * n * sizeof(int));
 
@@ -43,48 +42,24 @@ int main(int argc, char **argv) {
   int magnet = magnet_lattice(lattice,n);
 
 
-  //print_lattice(lattice, n);
-
+  print_lattice(lattice, n);
+   
   //Table of energies initialization
   int energy_levels = 10;
   double mc_list[energy_levels];
   mc_table(mc_list,T,J,B);
-  int k;
-  for(k=0;k<energy_levels;k++){
-    printf("idx: %d , exp : %f\n",k,mc_list[k]);
-  }
 
   int i;
-  /*
-  for (i = 0; i < 1; i++) {
-      metropolis(lattice, n, T, J, B, mc_list, &energy, &magnet);
-  }
-  */
-  /*
-  //Data writing
-  char filename[100];
-  sprintf(filename,"../results/aucorr/data%.2f.txt",T);
-  FILE *dt;
-  dt = fopen(filename,"w");
-  fprintf(dt,"Step\t\t\tEnergy\t\t\tMagnetization\n");
-  printf("%.2f\n",T);
-  */
-  
-  print_lattice(lattice,n);
   
   for (i = 0; i < niter; i++) {
       metropolis(lattice, n, T, J, B, mc_list, &energy, &magnet);
-      //fprintf(dt,"%e\t\t\t%f\t\t\t%d\n",(float)i,energy/(n*n),magnet);
   }
 
   printf("\n\n\n");
   print_lattice(lattice,n);
   printf("\n\n\n");
   printf("Final Energy: %f, Final Magnet %d\n",energy,magnet);
-  printf("Final Energy: %f, Final Magnet %d\n",energy_lattice(lattice,n,J,B),magnet_lattice(lattice,n));
 
-
-  //fclose(dt);
   free(lattice);
   return 0;
 }
