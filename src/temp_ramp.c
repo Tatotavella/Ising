@@ -18,13 +18,13 @@ int main(int argc, char **argv) {
   
   float prob = 0.5;
   int niter;
-  int n;
+  long int n;
   float Tini, Tfin;
   float J,B;
   int nOfTemps;
 
   if (argc==8){
-    sscanf(argv[1],"%d",&n);
+    sscanf(argv[1],"%ld",&n);
     sscanf(argv[2],"%f",&Tini);
     sscanf(argv[3],"%f",&Tfin);
     sscanf(argv[4],"%f",&J);
@@ -54,10 +54,10 @@ int main(int argc, char **argv) {
 
   //Data writing
   char filename[100];
-  sprintf(filename,"../results/EMT/MEvsTN%d.txt",n);
+  sprintf(filename,"../results/EMT/MEvsTN%ld.txt",n);
   FILE *fp;
   fp = fopen(filename,"w");
-  fprintf(fp,"Sim Data: Program: %s , Size: %d , Tini: %f , Tfin: %f , J: %f , B: %f , niter: %d , nOfTemps: %d\n",argv[0],n,Tini,Tfin,J,B,niter,nOfTemps);
+  fprintf(fp,"Sim Data: Program: %s , Size: %ld , Tini: %f , Tfin: %f , J: %f , B: %f , niter: %d , nOfTemps: %d\n",argv[0],n,Tini,Tfin,J,B,niter,nOfTemps);
   fprintf(fp,"T\t\t\t<E>\t\t\t<M>\t\t\tV(E)\t\t\tV(M)\n");
 
   //Temperature Loop
@@ -105,8 +105,8 @@ int main(int argc, char **argv) {
       if(i%decorr==0){
 	Eprom = Eprom + energy/(n*n);
 	Mprom = Mprom + (double)magnet/(n*n);
-	Esqr = Esqr + (energy*energy)/(n*n*n*n);
-	Msqr = Msqr + ((double)magnet*magnet)/(n*n*n*n);
+	Esqr = Esqr + (energy*energy)/(double)(n*n*n*n);
+	Msqr = Msqr + ((double)magnet*magnet)/(double)(n*n*n*n);
 	dataPoints = dataPoints + 1;
       }
     }

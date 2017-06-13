@@ -51,23 +51,40 @@ for s in sizes:
 
 	#f, axarr = plt.subplots(2, sharex=True)
 	axarr[0].errorbar(T,M,yerr=Merr,fmt='o')
-	axarr[0].set_ylabel('Magnetizacion')
+	#axarr[0].plot(T,M,'r')
+	#axarr[0].set_ylabel('Magnetizacion')
+	axarr[0].tick_params(axis='both', which='major', labelsize=20)
+	axarr[0].text(1.08, 0.0, r'$Magnetizacion$', fontsize=25, bbox=dict(facecolor='r', alpha=0.2))
+ 
 
-	axarr[1].errorbar(T,E,yerr=Eerr,fmt='o')
-	axarr[1].set_ylabel('Energia')
-	axarr[1].set_xlabel('Temperatura')
+	axarr[1].errorbar(T,E,yerr=Eerr,fmt='o',label='N '+s)
+	#axarr[1].plot(T,E,'b')
+	#axarr[1].set_ylabel('Energia')
+	axarr[1].set_xlabel(r'$Temperatura$',fontsize=30)
+	axarr[1].tick_params(axis='both', which='major', labelsize=20)
+	axarr[1].text(1.08, -1.0, r'$Energia$', fontsize=25, bbox=dict(facecolor='b', alpha=0.2)) 
+	axarr[1].legend(loc='lower right',prop={'size':15}, numpoints=1)
 
 	
 	plt.figure(1)
 	#g, bxarr = plt.subplots(2, sharex=True)
-	bxarr[0].plot(T,susc,'o')
-	bxarr[0].set_ylabel('Susceptibilidad')
+	bxarr[0].plot(T,susc,'o',label='N '+s)
+	#bxarr[0].plot(T,susc,'g',label='N '+s)
+	#bxarr[0].set_ylabel('Susceptibilidad')
+	bxarr[0].text(1.03, 0.42, r'$Susceptibilidad$', fontsize=25, bbox=dict(facecolor='g', alpha=0.2)) 
+	bxarr[0].legend(loc='lower right',prop={'size':15}, numpoints=1)
+	bxarr[0].set_yscale('log')
+	bxarr[0].tick_params(axis='both', which='major', labelsize=20)
 
-	bxarr[1].plot(T,cv,'*')
-	bxarr[1].set_xlabel('Temperatura')
-	bxarr[1].set_ylabel('Calor especifico')
+	bxarr[1].plot(T,cv,'o')
+	#bxarr[1].plot(T,cv,'b')
+	bxarr[1].text(1.03, 0.012, r'$Calor$'+' '+ r'$especifico$', fontsize=25, bbox=dict(facecolor='r', alpha=0.2)) 
+	bxarr[1].set_xlabel(r'$Temperatura$',fontsize=30)
+	#bxarr[1].set_ylabel('Calor especifico')
+	bxarr[1].tick_params(axis='both', which='major', labelsize=20)
+	bxarr[1].set_yscale('log')
 	
-
+#plt.legend()
 plt.show()
 
 

@@ -10,14 +10,14 @@ int main(int argc, char **argv) {
   
   float prob = 0.5;
   long int niter;
-  int n;
+  long int n;
   float Tini,Tfin;
   float J,B;
   long int writeFreq;
   int nOfTemps;
 
   if (argc==9){
-    sscanf(argv[1],"%d",&n);
+    sscanf(argv[1],"%ld",&n);
     sscanf(argv[2],"%f",&Tini);
     sscanf(argv[3],"%f",&Tfin);
     sscanf(argv[4],"%f",&J);
@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
 
   //Data writing
   FILE *fp = fopen("../results/HISTOGRAM/MEvsT.txt","w");
-  fprintf(fp,"Sim Data: Program: %s , Size: %d , Tini: %f , Tfin: %f , J: %f , B: %f , niter: %ld , nOfTemps: %d , writeFreq: %ld\n",argv[0],n,Tini,Tfin,J,B,niter,nOfTemps,writeFreq);
+  fprintf(fp,"Sim Data: Program: %s , Size: %ld , Tini: %f , Tfin: %f , J: %f , B: %f , niter: %ld , nOfTemps: %d , writeFreq: %ld\n",argv[0],n,Tini,Tfin,J,B,niter,nOfTemps,writeFreq);
   fprintf(fp,"T\t\t\t<E>\t\t\t<M>\t\t\tV(E)\t\t\tV(M)\n");
 
 

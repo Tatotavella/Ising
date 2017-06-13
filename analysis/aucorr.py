@@ -41,13 +41,21 @@ for a in Tes:
 	plt.show()
 	'''
 	plt.figure(3)
-	plt.plot(taus,aucM)
-	plt.xlabel('Tau')
-	plt.ylabel('Aucorr Magnetization')
+	plt.plot(taus,aucM,label='T '+a,linewidth=2)
+	plt.xlabel(r'$\tau$',fontsize=30)
+	plt.ylabel(r'$Autocorrelacion$',fontsize=30)
+	plt.legend(loc='upper right',prop={'size':15})
+	plt.tick_params(axis='both', which='major', labelsize=20)
+	plt.text(6200.0, 0.75, r'$Magnetizacion$', fontsize=25, bbox=dict(facecolor='r', alpha=0.2)) 
+
 	plt.figure(4)
-	plt.plot(taus,aucE)
-	plt.xlabel('Tau')
-	plt.ylabel('Aucorr Energy')
+	plt.plot(taus,aucE,label='T '+a,linewidth=2)
+	plt.xlabel(r'$\tau$',fontsize=30)
+	plt.ylabel(r'$Autocorrelacion$',fontsize=30)
+	plt.text(5000.0, 0.9, r'$Energia$', fontsize=25, bbox=dict(facecolor='b', alpha=0.2)) 
+	plt.tick_params(axis='both', which='major', labelsize=20)
+	plt.legend(loc='upper right',prop={'size':15})
+
 
 plt.show()
 

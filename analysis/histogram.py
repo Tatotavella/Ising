@@ -58,22 +58,23 @@ for T in Tes:
 		E.append(float(inter[1])/(N*N))
 		M.append(float(inter[2])/(N*N))
 
-	#if T[:4]=='2.30' or T[:4]=='2.33' or T[:4]=='2.36' or T[:4]=='2.40':
+	if T[:4]=='2.30' or T[:4]=='2.33' or T[:4]=='2.36' or T[:4]=='2.40':
 	
-	plt.figure(1)
-	hist_E , bin_edges_E = np.histogram(E, bins=n_of_bins,normed=True)
-	centres_E = (bin_edges_E[:-1] + bin_edges_E[1:])/2.
-	plt.hist(E,bins=n_of_bins,alpha=0.4,label=T[:4],normed=True)
-	plt.xlabel('Energia')
+		plt.figure(1)
+		hist_E , bin_edges_E = np.histogram(E, bins=n_of_bins,normed=True)
+		centres_E = (bin_edges_E[:-1] + bin_edges_E[1:])/2.
+		plt.hist(E,bins=n_of_bins,alpha=0.4,label=T[:4],normed=True)
+		plt.xlabel('Energia')
 	
-	plt.figure(2)
-	hist_M , bin_edges_M = np.histogram(M, bins=n_of_bins,normed=True)
-	centres_M = (bin_edges_M[:-1] + bin_edges_M[1:])/2.
-	plt.hist(M,bins=n_of_bins,alpha=0.4,label=T[:4],normed=True)
-	plt.xlabel(r'$Magnetizacion$',fontsize=30)
-	plt.ylabel(r'$Frecuencia$'+' '+r'$en$'+' '+r'$el$'+' '+r'$ensamble$',fontsize=30)	
-	plt.text(-0.72, 1.46, r'$Temperaturas$', fontsize=25, bbox=dict(facecolor='r', alpha=0.2)) 
-	plt.text(-0.3, 1.46, r'$J=1.0$, $B=0.0$, $N=32$', fontsize=25, bbox=dict(facecolor='g', alpha=0.2))
+		plt.figure(2)
+		hist_M , bin_edges_M = np.histogram(M, bins=n_of_bins,normed=True)
+		centres_M = (bin_edges_M[:-1] + bin_edges_M[1:])/2.
+		plt.hist(M,bins=n_of_bins,alpha=0.4,label=T[:4],normed=True)
+		plt.xlabel(r'$Magnetizacion$',fontsize=30)
+		plt.ylabel(r'$Frecuencia$'+' '+r'$en$'+' '+r'$el$'+' '+r'$ensamble$',fontsize=30)	
+		plt.text(-0.72, 1.46, r'$Temperaturas$', fontsize=25, bbox=dict(facecolor='r', alpha=0.2)) 
+		plt.text(-0.3, 1.46, r'$J=1.0$, $B=0.0$, $N=32$', fontsize=25, bbox=dict(facecolor='g', alpha=0.2))
+		plt.tick_params(axis='both', which='major', labelsize=20)
 
 	Ms.append(M)
 	
@@ -101,7 +102,7 @@ plt.show()
 #Guess [ a , b , mu , sg ]
 
 print(len(Magnets))
-j = 2
+j = 6
 
 guess = [1.2,1.1,-0.6,0.6]
 
@@ -116,13 +117,14 @@ yfit = bimod(xfit, *popt)
 
 print(popt)
 
-plt.plot(xfit,yfit,'r')
-plt.errorbar(xdata_M,ydata_M,yerr=errdata_M,fmt='bo',label = 'Temperatura '+Tes[j][:4])
+plt.plot(xfit,yfit,'r',linewidth=5)
+plt.errorbar(xdata_M,ydata_M,yerr=errdata_M,fmt='bo',label = 'T '+Tes[j][:4], markersize=10)
 
 plt.xlabel(r'$Magnetizacion$',fontsize=30)
-plt.ylabel(r'$Frecuencia$'+' '+r'$en$'+' '+r'$el$'+' '+r'$ensamble$',fontsize=30)	
+plt.ylabel(r'$Frecuencia$'+' '+r'$en$'+' '+r'$el$'+' '+r'$ensamble$',fontsize=30)
+plt.tick_params(axis='both', which='major', labelsize=20)	
 
-plt.legend(loc='upper left',prop={'size':15},numpoints=1)
+plt.legend(loc='upper left',prop={'size':25},numpoints=1)
 plt.show()
 
 
@@ -140,12 +142,14 @@ plt.plot(Tem,menM,'ro')
 plt.plot(Tem,menM,'r')
 plt.ylabel(r'$Magnetizacion$',fontsize=30)
 plt.xlabel(r'$Temperatura$',fontsize=30)
+plt.tick_params(axis='both', which='major', labelsize=20)
 plt.show()
 
 plt.plot(Tem,chi,'go')
 plt.plot(Tem,chi,'g')
 plt.ylabel(r'$Susceptibilidad$',fontsize=30)
 plt.xlabel(r'$Temperatura$',fontsize=30)
+plt.tick_params(axis='both', which='major', labelsize=20)
 plt.show()
 
 
