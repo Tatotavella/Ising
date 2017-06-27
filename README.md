@@ -1,3 +1,3 @@
-# Ising
-Implementation of Monte Carlo algorithm for the Ising system.
-![Alt text](/img/miedo.jpg?raw=true "Optional Title")
+# Ising  :feelsgood:
+Implementation of Monte Carlo algorithm for the Ising system. 
+![Esto era una foto de miedo](/img/miedo.jpg "o")
